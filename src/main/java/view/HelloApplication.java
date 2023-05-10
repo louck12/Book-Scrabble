@@ -1,4 +1,4 @@
-package com.example.clientside;
+package view;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
