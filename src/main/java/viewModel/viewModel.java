@@ -14,6 +14,7 @@ public class viewModel implements Observer {
         this.m = m;
         this.wc = wc;
         m.addObserver(this);
+        wc.addObserver(this);
 
     }
 
