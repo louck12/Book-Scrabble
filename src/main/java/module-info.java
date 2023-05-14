@@ -5,4 +5,6 @@ module com.example.clientside {
 
     opens view to javafx.fxml;
     exports view;
+    exports model;
+    opens model to javafx.fxml;
 }
