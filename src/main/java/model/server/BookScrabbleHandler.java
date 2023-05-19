@@ -15,10 +15,11 @@ public class BookScrabbleHandler implements ClientHandler {
     public void handleClient(InputStream inFromclient, OutputStream outToClient) {
         scan = new Scanner(inFromclient);
         out = new PrintWriter(outToClient);
-        DictionaryManager dm = DictionaryManager.get();
+        dm = DictionaryManager.get();
         boolean ans = false;
 
-        String line = scan.nextLine();
+        String line = scan.nextLine(); //Waiting for input from the host
+        System.out.println(line);
         String[] splited = line.split(",");
         if(splited[0].equals("Q")){
             ans = dm.query(Arrays.copyOfRange(splited, 1, splited.length));
@@ -29,9 +30,10 @@ public class BookScrabbleHandler implements ClientHandler {
         }
 
         if(ans)
-            out.println("true");
+            out.println("true\n");
         else
-            out.println("false");
+            out.println("false\n");
+
     }
 
     @Override

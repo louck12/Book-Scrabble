@@ -134,7 +134,7 @@ public class MainTrain {
 		public void handleClient(InputStream inFromclient, OutputStream outToClient) {
 			out=new PrintWriter(outToClient);
 			in=new Scanner(inFromclient);
-			String text = in.next();
+			String text = in.next(); //Waiting for input from the host
 			out.println(new StringBuilder(text).reverse().toString());
 			out.flush();
 		}
@@ -274,9 +274,8 @@ public class MainTrain {
 			testDM();
 			testBSCH();
 		}
-		System.out.println("done");
-*/
-		MyServer server=new MyServer(1234, new ClientHandler1());
+		System.out.println("done");*/
+		MyServer server=new MyServer(1234, new BookScrabbleHandler());
 		System.out.println("Server is running...");
 		server.start();
 	}
