@@ -23,11 +23,13 @@ public class BookScrabbleHandler implements ClientHandler {
         String[] splited = line.split(",");
         if(splited[0].equals("Q")){
             ans = dm.query(Arrays.copyOfRange(splited, 1, splited.length));
+
         }
 
         else if(splited[0].equals("C")){
             ans = dm.challenge(Arrays.copyOfRange(splited, 1, splited.length));
         }
+        System.out.println(ans);
 
         if(ans)
             out.println("true\n");

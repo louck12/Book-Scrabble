@@ -7,7 +7,7 @@ public class Board {
     private Tile[][] board= new Tile[15][15];
     private String bonus[][] = new String[15][15];
     private boolean firstWord = true;
-    private Board(){
+    public Board(){
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 board[i][j] = null;

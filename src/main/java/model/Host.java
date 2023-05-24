@@ -1,5 +1,6 @@
 package model;
 
+import model.board.Board;
 import model.server.ClientHandler;
 import model.server.MyServer;
 
@@ -17,10 +18,12 @@ public class Host {
     BufferedWriter outToServer;
     BufferedReader inFromServer;
 
+    Board board;
+
     public Host(int port){
         this.ip = "localhost";
         this.port = port;
-
+        board = new Board();
 
         //Connect to the main server
         try{
@@ -40,7 +43,6 @@ public class Host {
             System.out.println("Host Server Is Running...");
             for(int i = 0; i < MAX_GUESTS; i++){ //Handling ONLY 3 guests
                 Socket guestSocket = serverSocket.accept(); //guest connected to the host
-                //BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(guestSocket.getOutputStream()));
                 PrintWriter outToGuest = new PrintWriter(guestSocket.getOutputStream());
                 Scanner inFromGuest = new Scanner(guestSocket.getInputStream());
 
@@ -48,18 +50,19 @@ public class Host {
                 System.out.println("A Guest Just Connected");
                 String guestRequest = inFromGuest.nextLine(); //waiting for guest request
                 System.out.println(guestRequest);
-                if(guestRequest.equals("Q"))
+
+                outToServer.write("Q,mobydick.txt,"+guestRequest);
+
+                /*if(guestRequest.equals("Q"))
                     outToServer.write("Q,mobydick.txt,BOOK");
 
                 else if(guestRequest.equals("C"))
-                    outToServer.write("C,mobydick.txt,KJCBREJKVRVJ");
+                    outToServer.write("C,mobydick.txt,KJCBREJKVRVJ");*/
 
                 outToServer.newLine();
                 outToServer.flush();
-                outToGuest.write(inFromServer.readLine()); //Returning the response to the guest
-
-                //out.write("Hello From The Host");
-                //out.flush();
+                outToGuest.println(inFromServer.readLine()); //Returning the response to the guest
+                outToGuest.flush();
             }
 
             //Prevent more guests from connecting to the host
