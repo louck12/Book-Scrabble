@@ -24,7 +24,7 @@ public class MyServer {
             while(!stop) {
                 try {
                     Socket aClient = server.accept();
-                    System.out.println("A new host has connected"); //host connected
+                    System.out.println("A new client has connected"); //host connected
                     ch.handleClient(aClient.getInputStream(), aClient.getOutputStream());
                     ch.close();
                     aClient.close();

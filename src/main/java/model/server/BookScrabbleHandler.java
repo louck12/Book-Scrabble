@@ -18,23 +18,26 @@ public class BookScrabbleHandler implements ClientHandler {
         dm = DictionaryManager.get();
         boolean ans = false;
 
-        String line = scan.nextLine(); //Waiting for input from the host
-        System.out.println(line);
-        String[] splited = line.split(",");
-        if(splited[0].equals("Q")){
-            ans = dm.query(Arrays.copyOfRange(splited, 1, splited.length));
+        while(true){
+            String line = scan.nextLine(); //Waiting for input from the host
+            System.out.println(line);
+            String[] splited = line.split(",");
+            if(splited[0].equals("Q")){
+                ans = dm.query(Arrays.copyOfRange(splited, 1, splited.length));
+            }
 
+            else if(splited[0].equals("C")){
+                ans = dm.challenge(Arrays.copyOfRange(splited, 1, splited.length));
+            }
+
+            if(ans)
+                out.println("true");
+            else
+                out.println("false");
+
+            out.flush();
         }
 
-        else if(splited[0].equals("C")){
-            ans = dm.challenge(Arrays.copyOfRange(splited, 1, splited.length));
-        }
-        System.out.println(ans);
-
-        if(ans)
-            out.println("true\n");
-        else
-            out.println("false\n");
 
     }
 
