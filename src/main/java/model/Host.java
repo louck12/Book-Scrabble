@@ -7,6 +7,7 @@ import model.board.Word;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Host {
@@ -15,10 +16,11 @@ public class Host {
     public String ip;
     public int port;
 
-    BufferedWriter outToServer;
-    BufferedReader inFromServer;
+    PrintWriter outToServer;
+    Scanner inFromServer;
 
-    Board board;
+
+    public static ArrayList<GuestHandler> guestHandlers = new ArrayList<>();
 
     public Host(int port){
         this.ip = "localhost";
@@ -27,8 +29,8 @@ public class Host {
         //Connect to the main server
         try{
             Socket socket = new Socket("localhost", 1234);
-            inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            outToServer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            inFromServer = new Scanner(socket.getInputStream());
+            outToServer = new PrintWriter(socket.getOutputStream());
         } catch (IOException e){e.printStackTrace();}
     }
 
@@ -39,44 +41,11 @@ public class Host {
             System.out.println("Host Server Is Running...");
             for(int i = 0; i < MAX_GUESTS; i++){ //Handling ONLY 3 guests
                 Socket guestSocket = serverSocket.accept(); //guest connected to the host
-                PrintWriter outToGuest = new PrintWriter(guestSocket.getOutputStream());
-                Scanner inFromGuest = new Scanner(guestSocket.getInputStream());
-
-
                 System.out.println("A Guest Just Connected");
-                String wordFromGuest = inFromGuest.nextLine(); //waiting for guest request
 
-                //check if the word is boardLegal
-                Board board = Board.getBoard();
-                Tile[] tiles = new Tile[wordFromGuest.length()];
-                for(int j = 0; j < wordFromGuest.length(); j++){
-                    tiles[j] = Tile.Bag.getBag().getTile(wordFromGuest.charAt(j));
-                }
-                Word word = new Word(tiles, 5, 7, true);
-                String ansToGuest;
-                if(board.boardLegal(word)){
-                    //Ask server if the word is dictionary legal
-                    outToServer.write("Q,mobydick.txt,"+wordFromGuest);
-                    outToServer.newLine();
-                    outToServer.flush();
-
-                    if(inFromServer.readLine().equals("true")){
-                        //the word is legal dictionary wise
-                        ansToGuest = wordFromGuest +" is legal on the board and on dictionary";
-                    }
-
-                    else{
-                        ansToGuest = wordFromGuest+ " is not legal dictionary wise";
-                    }
-                }
-
-                else{
-                    ansToGuest = wordFromGuest+ " is not legal on the board";
-                }
-
-                outToGuest.println(ansToGuest); //Returning the response to the guest
-                outToGuest.flush();
-
+                GuestHandler ch = new GuestHandler(inFromServer, outToServer, guestSocket);
+                guestHandlers.add(ch);
+                ch.handleClient(guestSocket.getInputStream(), guestSocket.getOutputStream());
             }
 
             //Prevent more guests from connecting to the host
