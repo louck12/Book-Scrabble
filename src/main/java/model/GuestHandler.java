@@ -16,6 +16,8 @@ public  class GuestHandler implements ClientHandler{
 
     String guestName;
 
+    volatile boolean stop = false;
+
     public GuestHandler(Scanner inFromServer, PrintWriter outToServer, Socket guestSocket){
         this.inFromServer = inFromServer;
         this.outToServer = outToServer;
@@ -29,23 +31,27 @@ public  class GuestHandler implements ClientHandler{
         this.inFromGuest = new Scanner(inFromClient);
         //waiting for guest request
 
-        while (true) {
-            String msgFromGuest = inFromGuest.nextLine();
-            String wordFromGuest = msgFromGuest.split(",")[0];
-            System.out.println(wordFromGuest);
-            this.guestName = msgFromGuest.split(",")[1];
-            System.out.println(wordFromGuest);
-
-            if (wordFromGuest.equals("quit")) {
-                try {
-                    System.out.println("here on quit");
-                    Host.guestHandlers.remove(this);
-                    this.guestSocket.close();
-                    break;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        while (guestSocket.isConnected()) {
+            if(!inFromGuest.hasNext())
+                continue;
+            String msgFromGuest = inFromGuest.nextLine(); //challenge:Moby,4,5,true
+            String data = msgFromGuest.split(",")[0]; //challenge:Moby
+            String wordFromGuest;
+            boolean guestChallenged = false;
+            if(data.contains("challenge")){
+                wordFromGuest = data.split(":")[1];
+                guestChallenged = true;
             }
+            else{
+                wordFromGuest = msgFromGuest.split(",")[0];
+            }
+            int row = Integer.parseInt(msgFromGuest.split(",")[1]);
+            int col = Integer.parseInt(msgFromGuest.split(",")[2]);
+            String vertical = msgFromGuest.split(",")[3];
+            boolean isVertical;
+            isVertical = vertical.equals("true");
+            this.guestName = msgFromGuest.split(",")[4];
+
 
             //check if the word is boardLegal
             Board board = Board.getBoard();
@@ -53,38 +59,48 @@ public  class GuestHandler implements ClientHandler{
             for (int j = 0; j < wordFromGuest.length(); j++) {
                 tiles[j] = Tile.Bag.getBag().getTile(wordFromGuest.charAt(j));
             }
-            Word word = new Word(tiles, 5, 7, true);
+            Word word = new Word(tiles, row, col, isVertical);
             String ansToGuest;
+
             if (board.boardLegal(word)) {
                 //Ask server if the word is dictionary legal
-                outToServer.write("Q,mobydick.txt," + wordFromGuest + "\n");
-                outToServer.flush();
 
-                if (inFromServer.nextLine().equals("true"))
-                    //the word is legal dictionary wise
-                    ansToGuest = wordFromGuest + " is legal on the board and on dictionary";
+                if(!guestChallenged){
+                    //query
+                    outToServer.write("Q,mobydick.txt," + wordFromGuest + "\n");
+                    outToServer.flush();
+                    if (inFromServer.nextLine().equals("true"))
+                        ansToGuest = wordFromGuest + " is legal on the board and on dictionary";
+                    else
+                        ansToGuest = wordFromGuest + " is not legal dictionary wise";
+                }
 
-                else
-                    ansToGuest = wordFromGuest + " is not legal dictionary wise";
-
-            } else
+                else{
+                    //challenge
+                    outToServer.write("C,mobydick.txt," + wordFromGuest + "\n");
+                    outToServer.flush();
+                    if (inFromServer.nextLine().equals("true"))
+                        ansToGuest = "challenged successfully: " +wordFromGuest + " is legal on the dictionary";
+                    else
+                        ansToGuest = "Challenged unsuccessfully: "+wordFromGuest + " is not legal dictionary wise";
+                }
+            }
+            else
                 ansToGuest = wordFromGuest + " is not legal on the board";
 
-
-            System.out.println(ansToGuest);
-
-            sendAnswerToAllGuests(ansToGuest);
+            //sendAnswerToAllGuests(ansToGuest);
+            String msg = "To: " + guestName + ", " +ansToGuest;
+            outToGuest.println(msg);
+            outToGuest.flush();
         }
     }
-
-        //out.println(ansToGuest); //Returning the response to the guest
-        //out.flush();
 
 
     private void sendAnswerToAllGuests(String ansToGuest) {
         for(GuestHandler gh: Host.guestHandlers){
-            String name = gh.guestName;
-            gh.outToGuest.println("To: " + name + ", " +ansToGuest);
+            String msg = "To: " + gh.guestName + ", " +ansToGuest;
+            System.out.println(msg);
+            gh.outToGuest.println(msg);
             gh.outToGuest.flush();
         }
     }

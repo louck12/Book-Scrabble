@@ -1,9 +1,5 @@
 package model;
 
-import model.board.Board;
-import model.board.Tile;
-import model.board.Word;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -43,9 +39,17 @@ public class Host {
                 Socket guestSocket = serverSocket.accept(); //guest connected to the host
                 System.out.println("A Guest Just Connected");
 
-                GuestHandler ch = new GuestHandler(inFromServer, outToServer, guestSocket);
-                guestHandlers.add(ch);
-                ch.handleClient(guestSocket.getInputStream(), guestSocket.getOutputStream());
+                new Thread(()->{
+                    try {
+                        GuestHandler ch = new GuestHandler(inFromServer, outToServer, guestSocket);
+                        guestHandlers.add(ch);
+                        ch.handleClient(guestSocket.getInputStream(), guestSocket.getOutputStream());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).start();
+
+
             }
 
             //Prevent more guests from connecting to the host
