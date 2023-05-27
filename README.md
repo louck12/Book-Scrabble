@@ -1,9 +1,9 @@
 # Book-Scrabble: GANTT
-
+**First Milestone**
 ##	First Sprint - Communication with the server 
 * Start Date: 1/5/23
-* Duration: 1 week
-* End Date: 8/5/23 
+* Duration: 15 days
+* End Date: 15/5/23 
 
 
 
@@ -18,9 +18,9 @@
 
 
 ##	Second Sprint - Communication functionality between guest and host
-* Start Date: 9/5/23
-* Duration: 9 days
-* End Date: 18/5/23
+* Start Date: 15/5/23
+* Duration: 12 days
+* End Date: 27/5/23
 
 
 | Task                                               | Duration | Defining Success                     | Assigned         |
@@ -32,12 +32,12 @@
 | Unit testing                                       | 2.5 days | All tests passed successfully        | Eitan & Louck    |
 | Left overs                                         | 0.5 day  |                                      | Eitan & Louck    |
 
-
+**Second Milestone**
 ## Third Sprint - Completion of the view
 
-* Start Date: 20/5/23
-* Duration: 1 week
-* End Date: 26/5/23
+* Start Date: 28/5/23
+* Duration: 10 days
+* End Date: 7/6/23
 
 
 | Task                                        | Duration | Defining Success | Assigned       |
@@ -53,9 +53,9 @@
 
 ## Fourth Sprint - Completion of the view model
 
-* Start Date: 20/5/23
-* Duration: 1 week
-* End Date: 26/5/23
+* Start Date: 8/6/23
+* Duration: 10 days
+* End Date: 18/6/23
 
 
 | Task                                                                                | Duration | Defining Success | Assigned    |
@@ -73,9 +73,9 @@
 
 ## Fifth Sprint - Documentations & presentation video 
 
-* Start Date: -
+* Start Date: 19/6/23
 * Duration: 3 days
-* End Date: -
+* End Date: 22/6/23
 
 
 | Task                                        | Duration | Defining Success | Assigned             |
