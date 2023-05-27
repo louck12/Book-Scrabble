@@ -27,7 +27,7 @@
 | Define communication protocol between guest & host | 1 day    | Protocol defined successfully        | Orel & Yehonatan |
 | Design communication flow & logic                  | 1.5 days | Ready for implementation             | Orel & Yehonatan |
 | Implement the local server socket of the host      | 2 days   | Host local server is running         | Orel & Yehonatan |
-| Implement the connection of the guest to the host  | 1.5 days | Guest is able to connect to the host | Orel & Yehonatan |
+| Implement the connection of the guest to the host & guest handler   | 1.5 days | Guest is able to connect to the host | Orel & Yehonatan |
 | Unit testing                                       | 2.5 days | All tests passed successfully        | Eitan & Louck    |
 | Left overs                                         | 0.5 day  |                                      | Eitan & Louck    |
 
