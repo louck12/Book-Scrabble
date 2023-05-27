@@ -1,24 +1,25 @@
 package model;
 
+import model.board.Word;
+
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Guest {
 
-    String guestName;
 
-    Socket socket;
+    public Socket socket;
 
-    Scanner inFromHost;
-    PrintWriter outToHost;
+    public Scanner inFromHost;
+    public PrintWriter outToHost;
+   public ArrayList<String> l=new ArrayList<>();
+  public String word;
+    public int numOfWords = 0;
 
-    int numOfWords = 0;
-
-    public Guest(String guestName){
-        this.guestName = guestName;
-
+    public Guest(){
         //Guest Mode
         try{
             this.socket = new Socket("127.0.0.1", 8000); //we're assuming that the guest collected the ip and the port of the host
@@ -42,27 +43,27 @@ public class Guest {
     }
 
     public void sendWordToHost(String word){
-        outToHost.println(word + "," +guestName);
+        outToHost.println(word);
         outToHost.flush();
         numOfWords++;
     }
 
     public void challengeWord(String word){
-        outToHost.println("challenge:"+word+","+guestName);
+        outToHost.println("challenge:"+word);
         outToHost.flush();
         numOfWords++;
     }
 
 
 
-    public void listenForMessages(){
+    public void listenForMessages()
+    {
         for(int i = 0; i < numOfWords; i++){
-            System.out.println(inFromHost.nextLine());
+            word=inFromHost.nextLine();
+            l.add(word);
+            System.out.println(word);
         }
     }
-
-
-
 
     public void closeEverything() throws IOException {
         try{
@@ -72,9 +73,8 @@ public class Guest {
         }catch (IOException e){e.printStackTrace();}
     }
 
-
     public static void main(String[] args) {
-        Guest g1= new Guest("Avi");
+        Guest g1= new Guest();
         //Guest g2= new Guest("Orel");
 
         g1.sendWordToHost("Moby,5,7,true");
@@ -93,4 +93,3 @@ public class Guest {
 
     }
 }
-
