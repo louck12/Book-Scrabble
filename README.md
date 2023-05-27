@@ -70,7 +70,7 @@
 | Unit testing                                                                        |     1 day  |                  |Eitan & Louck|
 | Left overs                                                                          |    0.5 day  |                  |Orel & Yehonatan & Eitan & Louck|
 
-
+**Third milestone**
 ## Fifth Sprint - Documentations & presentation video 
 
 * Start Date: 19/6/23
