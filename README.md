@@ -17,7 +17,7 @@
 
 
 ##	Second Sprint - Communication functionality between guest and host
-* Start Date: 15/5/23
+* Start Date: 16/5/23
 * Duration: 12 days
 * End Date: 27/5/23
 
