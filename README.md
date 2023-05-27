@@ -6,7 +6,6 @@
 * End Date: 15/5/23 
 
 
-
 | Task                                                  | Duration | Defining Success                                    | Assigned          |
 |-------------------------------------------------------|----------|-----------------------------------------------------|-------------------|
 | Define communication protocol & explore documentation | 1 day    | Protocol defined successfully                       | Eitan & Louck     |
