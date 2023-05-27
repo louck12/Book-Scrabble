@@ -19,8 +19,12 @@ public class BookScrabbleHandler implements ClientHandler {
         boolean ans = false;
 
         while(true){
+            if(!scan.hasNext()){
+                close();
+                break;
+            }
+
             String line = scan.nextLine(); //Waiting for input from the host
-            System.out.println(line);
             String[] splited = line.split(",");
             if(splited[0].equals("Q")){
                 ans = dm.query(Arrays.copyOfRange(splited, 1, splited.length));
