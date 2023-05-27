@@ -40,15 +40,15 @@
 * End Date: 26/5/23
 
 
-| Task                                        | Duration | Defining Success | Assigned |
-|---------------------------------------------|----------|------------------|----------|
-| Define UI components                        |          |                  |          |
-| Design & implement welcome page             |          |                  |          |
-| Design & implement game board & players     |          |                  |          |
-| Integrate UI components with the view model |          |                  |          |
-| Implement error handling                    |          |                  |          |
-| Unit testing                                |          |                  |          |
-| Left overs                                  |          |                  |          |
+| Task                                        | Duration | Defining Success | Assigned       |
+|---------------------------------------------|----------|------------------|----------------|
+| Define UI components                        |    1     |                  |Eitan & Louck   |
+| Design & implement welcome page             |    1.5   |                  |Eitan & Louck   |
+| Design & implement game board & players     |    1.5   |                   |Eitan & Louck  |
+| Integrate UI components with the view model |    1     |                  |Orel & Yehonatan|
+| Implement error handling                    |    1.5   |                  |Orel & Yehonatan|
+| Unit testing                                |    1     |                  |Orel & Yehonatan|
+| Left overs                                  |    0.5   |                  |Orel & Yehonatan & Eitan & Louck|
 
 
 ## Fourth Sprint - Completion of the view model
@@ -58,18 +58,17 @@
 * End Date: 26/5/23
 
 
-| Task                                                                                | Duration | Defining Success | Assigned |
-|-------------------------------------------------------------------------------------|----------|------------------|----------|
-| Define use cases, user interactions and work flow with the view, view model & model |          |                  |          |
-| Implement connection to the model                                                   |          |                  |          |
-| Implement user welcome page logic                                                   |          |                  |          |
-| Design & implement data retrieval functions  ??(we connect db?)                     |          |                  |          |
-| Design & implement board manipulation functions                                     |          |                  |          |
-| Design & implement data binding                                                     |          |                  |          |
-| Implement error handling                                                            |          |                  |          |
-| 5 min demo video                                                                    |          |                  |          |
-| Unit testing                                                                        |          |                  |          |
-| Left overs                                                                          |          |                  |          |
+| Task                                                                                | Duration | Defining Success | Assigned    |
+|-------------------------------------------------------------------------------------|----------|------------------|-------------|
+| Define use cases, user interactions and work flow with the view, view model & model |    1     |                  |Eitan & Louck|
+| Implement connection to the model                                                   |    1.5   |                  |Eitan & Louck|
+| Implement user welcome page logic                                                   |     1    |                  |Eitan & Louck|
+| Design & implement board manipulation functions                                     |     1    |                  |Orel & Yehonatan|
+| Design & implement data binding                                                     |     1    |                  |Orel & Yehonatan|
+| Implement error handling                                                            |     1    |                  |Orel & Yehonatan|
+| 5 min demo video                                                                    |    0.5   |                  |Orel & Yehonatan|
+| Unit testing                                                                        |     1    |                  |Eitan & Louck|
+| Left overs                                                                          |    0.5   |                  |Orel & Yehonatan & Eitan & Louck|
 
 
 ## Fifth Sprint - Documentations & presentation video 
@@ -79,7 +78,7 @@
 * End Date: -
 
 
-| Task                                        | Duration | Defining Success | Assigned |
-|---------------------------------------------|----------|------------------|----------|
-| Write code's entire documentation in github |          |                  |          |
-| Record presentation video                   |          |                  |          |
+| Task                                        | Duration | Defining Success | Assigned             |
+|---------------------------------------------|----------|------------------|----------------------|
+| Write code's entire documentation in github |      1   |                  |    Eitan & Louck|
+| Record presentation video                   |      0.5 |                  |      Orel & Yehonatan|
