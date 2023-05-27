@@ -14,9 +14,6 @@ public  class GuestHandler implements ClientHandler{
 
     Socket guestSocket;
 
-    String guestName;
-
-    volatile boolean stop = false;
 
     public GuestHandler(Scanner inFromServer, PrintWriter outToServer, Socket guestSocket){
         this.inFromServer = inFromServer;
@@ -34,8 +31,8 @@ public  class GuestHandler implements ClientHandler{
         while (guestSocket.isConnected()) {
             if(!inFromGuest.hasNext())
                 continue;
-            String msgFromGuest = inFromGuest.nextLine(); //challenge:Moby,4,5,true
-            String data = msgFromGuest.split(",")[0]; //challenge:Moby
+            String msgFromGuest = inFromGuest.nextLine(); //Moby,7,7,true
+            String data = msgFromGuest.split(",")[0]; //Moby
             String wordFromGuest;
             boolean guestChallenged = false;
             if(data.contains("challenge")){
@@ -43,14 +40,13 @@ public  class GuestHandler implements ClientHandler{
                 guestChallenged = true;
             }
             else{
-                wordFromGuest = msgFromGuest.split(",")[0];
+                wordFromGuest = data;
             }
             int row = Integer.parseInt(msgFromGuest.split(",")[1]);
             int col = Integer.parseInt(msgFromGuest.split(",")[2]);
             String vertical = msgFromGuest.split(",")[3];
             boolean isVertical;
             isVertical = vertical.equals("true");
-            this.guestName = msgFromGuest.split(",")[4];
 
 
             //check if the word is boardLegal
@@ -67,43 +63,40 @@ public  class GuestHandler implements ClientHandler{
 
                 if(!guestChallenged){
                     //query
-                    outToServer.write("Q,mobydick.txt," + wordFromGuest + "\n");
+                    outToServer.write("Q,mobydick.txt,pg10.txt,shakespeare.txt," + wordFromGuest + "\n");
                     outToServer.flush();
-                    if (inFromServer.nextLine().equals("true"))
-                        ansToGuest = wordFromGuest + " is legal on the board and on dictionary";
-                    else
-                        ansToGuest = wordFromGuest + " is not legal dictionary wise";
+                    if (inFromServer.nextLine().equals("true")){
+                        ansToGuest = "The word " +wordFromGuest+" Dictionary Query: true";
+                        board.tryPlaceWord(word);
+                        System.out.println("The word " +wordFromGuest +" placed on the board");
+                    }
+
+                    else{
+                        ansToGuest = "The word " +wordFromGuest+" Dictionary Query: false";
+                    }
+
                 }
 
                 else{
                     //challenge
-                    outToServer.write("C,mobydick.txt," + wordFromGuest + "\n");
+                    outToServer.write("Q,mobydick.txt,pg10.txt,shakespeare.txt," + wordFromGuest + "\n");
                     outToServer.flush();
                     if (inFromServer.nextLine().equals("true"))
-                        ansToGuest = "challenged successfully: " +wordFromGuest + " is legal on the dictionary";
+                        ansToGuest = "The word " +wordFromGuest+ " Dictionary Challenge: true";
                     else
-                        ansToGuest = "Challenged unsuccessfully: "+wordFromGuest + " is not legal dictionary wise";
+                        ansToGuest = "The word " +wordFromGuest+ " Dictionary Challenge: false";
                 }
             }
             else
-                ansToGuest = wordFromGuest + " is not legal on the board";
+                ansToGuest = "The word: " +wordFromGuest + " is not legal on the board";
 
-            //sendAnswerToAllGuests(ansToGuest);
-            String msg = "To: " + guestName + ", " +ansToGuest;
+            String msg = ansToGuest;
             outToGuest.println(msg);
             outToGuest.flush();
         }
     }
 
 
-    private void sendAnswerToAllGuests(String ansToGuest) {
-        for(GuestHandler gh: Host.guestHandlers){
-            String msg = "To: " + gh.guestName + ", " +ansToGuest;
-            System.out.println(msg);
-            gh.outToGuest.println(msg);
-            gh.outToGuest.flush();
-        }
-    }
 
     @Override
     public void close() {
