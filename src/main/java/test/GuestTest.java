@@ -40,7 +40,7 @@ public class GuestTest {
 
         ArrayList<String> al = new ArrayList();
         String stn1 = "Moby,7,7,true";
-        String stn2 = "Up,7,6,true";
+        String stn2 = "jejb,7,6,true";
         String stn3 = "BLAB,10,20,true";
         String stn4 = "Run,7,7,false";
         al.add(stn1);
