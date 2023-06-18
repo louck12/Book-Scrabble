@@ -1,4 +1,7 @@
 # Book-Scrabble: GANTT
+
+Demo link: https://drive.google.com/file/d/1lQOxuefdNktF1vmqkQ9tsqpJJSu66otO/view?usp=sharing
+
 **First Milestone**
 ##	First Sprint - Communication with the server 
 * Start Date: 1/5/23
