@@ -1,28 +1,64 @@
 package model;
 
-import java.io.*;
-import java.net.Socket;
+import model.board.Tile;
+import viewModel.ViewModel;
+
 import java.util.Observable;
 
 public class Model extends Observable {
 
-    //TODO
-    //Add FACADE
-    //Implement test layer for each class in the model
-    //Write GANTT chart in readMe.md
+    Tile[] tiles;
 
-    public static void communicationWithGameServer(){
-        try{
-            Socket socket = new Socket("localhost", 1234);
-            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            bw.write("Hello Server!");
-            bw.flush();
-        } catch (IOException e){e.printStackTrace();}
+    String currentGuestTurn;
+    private boolean tilesFlag;
+
+    private boolean turnFlag;
+
+
+    Host host;
+
+    public Model(Host host){
+        tiles = new Tile[7];
+        currentGuestTurn = new String();
+        tilesFlag = false;
+        turnFlag = false;
+        this.host = host;
+
+        host.connectToMainServer();
+        new Thread(()-> {
+            host.hostMode();
+        }).start();
     }
 
-    public static void main(String[] args) {
-        communicationWithGameServer();
+    public void randomTiles(){
+        turnFlag = false;
+        tilesFlag = true;
+        Tile.Bag bag = Tile.Bag.getBag();
+        for(int i = 0; i < tiles.length; i++){
+            tiles[i] = bag.getRand();
+        }
+        setChanged();
+        notifyObservers();
     }
+
+    public void nextTurn(){
+        tilesFlag = false;
+        turnFlag = true;
+        currentGuestTurn = host.turnManager.nextTurn();
+        setChanged();
+        notifyObservers();
+    }
+
+
+    public Tile[] getRandomTiles(){
+        return tiles;
+    }
+
+    public String getCurrentGuestTurn(){return currentGuestTurn;}
+
+    public boolean getTilesFlag(){return tilesFlag;}
+    public boolean getTurnsFlag(){return turnFlag;}
+
+
 
 }
