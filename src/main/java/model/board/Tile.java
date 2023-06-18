@@ -73,15 +73,17 @@ public class Tile {
         }
 
         public Tile getRand() {
-            if(size>0) {
-                int i=r.nextInt(quantities.length);
-                while(quantities[i]==0)
-                    i=r.nextInt(quantities.length);
-                size-=1;
-                quantities[i]-=1;
-                return tiles[i];
-            }
-            return null;
+            //if(size>0) {
+            if(quantities.length == 0)
+                return null;
+            int i=r.nextInt(quantities.length);
+            while(quantities[i]==0)
+                i=r.nextInt(quantities.length);
+                //size-=1;
+                //quantities[i]-=1;
+            return tiles[i];
+            //}
+            //return null;
         }
 
         public Tile getTile(char c) {
