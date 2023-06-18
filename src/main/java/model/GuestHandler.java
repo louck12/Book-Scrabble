@@ -6,6 +6,7 @@ import model.board.Word;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public  class GuestHandler implements ClientHandler{
@@ -14,11 +15,14 @@ public  class GuestHandler implements ClientHandler{
 
     Socket guestSocket;
 
+    Host host;
 
-    public GuestHandler(Scanner inFromServer, PrintWriter outToServer, Socket guestSocket){
+
+    public GuestHandler(Scanner inFromServer, PrintWriter outToServer, Socket guestSocket, Host host){
         this.inFromServer = inFromServer;
         this.outToServer = outToServer;
         this.guestSocket = guestSocket;
+        this.host = host;
     }
 
 
@@ -26,13 +30,18 @@ public  class GuestHandler implements ClientHandler{
     public void handleClient(InputStream inFromClient, OutputStream outToClient) {
         this.outToGuest = new PrintWriter(outToClient);
         this.inFromGuest = new Scanner(inFromClient);
+        int score = 0;
         //waiting for guest request
 
         while (guestSocket.isConnected()) {
-            if(!inFromGuest.hasNext())
-                continue;
-            String msgFromGuest = inFromGuest.nextLine(); //Moby,7,7,true
-            String data = msgFromGuest.split(",")[0]; //Moby
+            String msgFromGuest;
+            try{
+                msgFromGuest = inFromGuest.nextLine();
+            } catch(NoSuchElementException e){
+                break;
+            }
+
+            String data = msgFromGuest.split(",")[1];
             String wordFromGuest;
             boolean guestChallenged = false;
             if(data.contains("challenge")){
@@ -42,9 +51,9 @@ public  class GuestHandler implements ClientHandler{
             else{
                 wordFromGuest = data;
             }
-            int row = Integer.parseInt(msgFromGuest.split(",")[1]);
-            int col = Integer.parseInt(msgFromGuest.split(",")[2]);
-            String vertical = msgFromGuest.split(",")[3];
+            int row = Integer.parseInt(msgFromGuest.split(",")[2]);
+            int col = Integer.parseInt(msgFromGuest.split(",")[3]);
+            String vertical = msgFromGuest.split(",")[4];
             boolean isVertical;
             isVertical = vertical.equals("true");
 
@@ -52,50 +61,72 @@ public  class GuestHandler implements ClientHandler{
             //check if the word is boardLegal
             Board board = Board.getBoard();
             Tile[] tiles = new Tile[wordFromGuest.length()];
+
+
             for (int j = 0; j < wordFromGuest.length(); j++) {
-                tiles[j] = Tile.Bag.getBag().getTile(wordFromGuest.charAt(j));
+                if(wordFromGuest.charAt(j) != '_')
+                    tiles[j] = Tile.Bag.getBag().getTile(wordFromGuest.charAt(j));
             }
             Word word = new Word(tiles, row, col, isVertical);
-            String ansToGuest;
+            String ansToGuest = "";
 
             if (board.boardLegal(word)) {
                 //Ask server if the word is dictionary legal
 
                 if(!guestChallenged){
                     //query
-                    outToServer.write("Q,mobydick.txt,pg10.txt,shakespeare.txt," + wordFromGuest + "\n");
-                    outToServer.flush();
-                    if (inFromServer.nextLine().equals("true")){
-                        ansToGuest = "The word " +wordFromGuest+" Dictionary Query: true";
-                        board.tryPlaceWord(word);
-                        System.out.println("The word " +wordFromGuest +" placed on the board");
+                    score = board.tryPlaceWord(word, inFromServer, outToServer, false);
+                    if(score == 0){
+                        ansToGuest = "Dictionary:false";
                     }
-
                     else{
-                        ansToGuest = "The word " +wordFromGuest+" Dictionary Query: false";
+                        ansToGuest = "Dictionary:true";
+                        board.print();
                     }
-
+                   
                 }
 
                 else{
                     //challenge
-                    outToServer.write("Q,mobydick.txt,pg10.txt,shakespeare.txt," + wordFromGuest + "\n");
+                    outToServer.write("C,mobydick.txt,pg10.txt,shakespeare.txt," + wordFromGuest + "\n");
                     outToServer.flush();
-                    if (inFromServer.nextLine().equals("true"))
-                        ansToGuest = "The word " +wordFromGuest+ " Dictionary Challenge: true";
-                    else
-                        ansToGuest = "The word " +wordFromGuest+ " Dictionary Challenge: false";
+                    if (inFromServer.nextLine().equals("true")){
+                        score = board.tryPlaceWord(word, inFromServer, outToServer, true);
+                        ansToGuest = "Dictionary:true";
+                        //ansToGuest = "The word " +wordFromGuest+ " successfully challenged";
+                    }
+                    else{
+                        //ansToGuest = "The word " +wordFromGuest+ " unsuccessfully challenged";
+                        ansToGuest = "Dictionary:false";
+                    }
                 }
             }
-            else
-                ansToGuest = "The word: " +wordFromGuest + " is not legal on the board";
+            else{
+                ansToGuest = "Board:false";
+                //ansToGuest = "The word: " +wordFromGuest + " is not legal on the board.";
+            }
 
-            String msg = ansToGuest;
-            outToGuest.println(msg);
-            outToGuest.flush();
+            String msg = ansToGuest+","+score+","+msgFromGuest;
+
+            if(ansToGuest.contains("false")){
+                for(Tile t:tiles){
+                    if(t != null)
+                        Tile.Bag.getBag().put(t);
+                }
+            } else {
+                String lastTurn = host.turnManager.getTurns().peek();
+                String nextTurn = host.turnManager.nextTurn();
+                msg = msg +",lastTurn:"+lastTurn+ ",nextTurn:"+nextTurn;
+            }
+
+            for(GuestHandler gh: Host.guestHandlers){
+                gh.outToGuest.println(msg);
+                gh.outToGuest.flush();
+            }
+
         }
-    }
 
+    }
 
 
     @Override
