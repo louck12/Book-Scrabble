@@ -1,11 +1,24 @@
 
 package model.board;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Board {
 
+    public class Positions{
+        int row;
+        int col;
+
+        public Positions(int row, int col){
+            this.col = col;
+            this.row = row;
+        }
+    }
+
     private static Board board=null;
+
 
     public static Board getBoard() {
         if(board==null)
@@ -39,7 +52,11 @@ public class Board {
 
     Tile[][] tiles;
 
+    ArrayList<Positions> approvedTiles = new ArrayList<>();
+
     boolean isEmpty;
+
+    public ArrayList<Tile> tilesInBoard = new ArrayList<>();
 
     private Board() {
         tiles=new Tile[15][15];
@@ -49,6 +66,7 @@ public class Board {
     public Tile[][] getTiles() {
         return tiles.clone();
     }
+
 
 
     private boolean inBoard(int row,int col) {
@@ -86,6 +104,27 @@ public class Board {
         return false;
     }
 
+    /*private boolean crossTile(Word w) {
+        int i=w.getRow(),j=w.getCol();
+        for(int k=0;k<w.getTiles().length;k++) {
+
+            if(tiles[i][j]!=null ||
+                    (inBoard(i+1, j) 	&& tiles[i+1][j]!=null)   ||
+
+                    (inBoard(i, j+1) 	&& tiles[i][j+1]!=null)   ||
+
+                    (inBoard(i-1, j) 	&& tiles[i-1][j]!=null)   ||
+
+                    (inBoard(i, j-1) 	&& tiles[i][j-1]!=null)
+
+            )
+                return true;
+
+            if(w.isVertical()) i++; else j++;
+        }
+        return false;
+    }*/
+
     private boolean changesTile(Word w) {
         int i=w.getRow(),j=w.getCol();
         for(Tile t : w.getTiles()) {
@@ -121,14 +160,20 @@ public class Board {
         if(!isEmpty && !crossTile(w))
             return false;
 
-        if(changesTile(w))
-            return false;
+        /*if(changesTile(w))
+            return false;*/
 
         return true;
     }
 
-    public boolean dictionaryLegal(Word w) {
-        return  true;
+    public boolean dictionaryLegal(Word w, Scanner inFromServer, PrintWriter outToServer) {
+       String word = "";
+       for(Tile t: w.getTiles())
+           word+=t.letter;
+        outToServer.write("Q,mobydick.txt,pg10.txt,shakespeare.txt," + word + "\n");
+        outToServer.flush();
+        String ans = inFromServer.nextLine();
+        return ans.equals("true");
     }
 
 
@@ -175,7 +220,7 @@ public class Board {
     }
 
     public ArrayList<Word> getWords(Word w) {
-        Tile[][] ts=getTiles(); // a clone...
+        /*Tile[][] ts=getTiles(); // a clone...
         ArrayList<Word> before=getAllWords(ts);
         // demo placement of new word
         int row=w.getRow();
@@ -186,7 +231,74 @@ public class Board {
         }
         ArrayList<Word> after=getAllWords(ts);
         after.removeAll(before); // only new words remain...
-        return after;
+        return after;*/
+        ArrayList<Word> before = new ArrayList<Word>();
+        ArrayList<Word> after = new ArrayList<Word>();
+
+        before = currentBoardWords();
+
+        int row = w.getRow();
+        int col = w.getCol();
+        int wordLen = w.getTiles().length;
+
+        for(int i = 0; i < wordLen; i++){
+
+            if(w.isVertical() && w.getTiles()[i] != null){
+                tiles[row + i][col] = w.getTiles()[i];
+            }
+
+            else if(!w.isVertical() && w.getTiles()[i] != null){
+                tiles[row][col + i] = w.getTiles()[i];
+            }
+        }
+        after = currentBoardWords();
+        boolean foundExistedTile;
+
+        //unplacing the word from the board
+        for(int i = 0; i < wordLen; i++){
+            /*if(w.getTiles()[i] == null) continue;*/
+            foundExistedTile = false;
+            if(w.isVertical()){
+                for(Positions p: approvedTiles){
+                    if(row+i == p.row && col == p.col){
+                        foundExistedTile = true;
+                        break;
+                    }
+                }
+                if(!foundExistedTile)
+                    tiles[row + i][col] = null;
+            }
+            else{
+
+                for(Positions p: approvedTiles){
+                    if(row == p.row && col+i == p.col){
+                        foundExistedTile = true;
+                        break;
+                    }
+                }
+                if(!foundExistedTile)
+                    tiles[row][col + i] = null;
+
+            }
+        }
+
+        ArrayList<Word> difference = new ArrayList<Word>();
+        boolean found = false;
+        for(Word wAfter: after){
+            found = false;
+            for(Word wBefore: before){
+                if(compareTwoWords(wAfter, wBefore)){
+                    found = true;
+                    break;
+                }
+            }
+
+            if(!found){
+                difference.add(wAfter);
+            }
+        }
+
+        return difference;
     }
 
     public int getScore(Word w) {
@@ -215,7 +327,8 @@ public class Board {
 
     }
 
-    public int tryPlaceWord(Word w) {
+
+    public int tryPlaceWord(Word w, Scanner inFromServer, PrintWriter outToServer, boolean successfullyChallenged) {
 
         Tile[] ts = w.getTiles();
         int row=w.getRow();
@@ -232,11 +345,23 @@ public class Board {
         if(boardLegal(test) ) {
             ArrayList<Word> newWords=getWords(test);
             for(Word nw : newWords) {
-                if(dictionaryLegal(nw))
+                if(successfullyChallenged || dictionaryLegal(nw, inFromServer, outToServer))
                     sum+=getScore(nw);
                 else
                     return 0;
             }
+        }
+
+        if(sum != 0){
+            int r = w.getRow();
+            int c = w.getCol();
+            for(Tile t: w.getTiles()){
+                if(w.isVertical())
+                    approvedTiles.add(new Positions(r++, c));
+                else
+                    approvedTiles.add(new Positions(r, c++));
+            }
+
         }
 
         // the placement
@@ -265,4 +390,71 @@ public class Board {
             System.out.println();
         }
     }
+
+
+    public ArrayList<Word> currentBoardWords(){
+
+        int start = 0;
+        int end = 0;
+        Word word ;
+        ArrayList<Tile> t = new ArrayList<Tile>();
+        ArrayList<Word> boardWords = new ArrayList<Word>();
+
+
+        //checking horizontal words
+        for(int row = 0; row < 15; row++){
+            start = 0;
+
+            end = 0;
+            while(true){
+                if(end > 14) break;
+                for(start = end; start <= 14 && tiles[row][start] == null; start++);
+                if(start > 14) break;
+                for(end = start; end <= 14 && tiles[row][end] != null; end++);
+                if(start != end - 1){
+                    for(int i = start; i < end; i++){
+                        t.add(tiles[row][i]);
+                    }
+
+                    word = new Word(t.toArray(new Tile[t.size()]), row, start, false);
+                    boardWords.add(word);
+                    t.clear();
+
+                }
+            }
+
+        }
+
+        //checking vertical words
+        for(int col = 0; col < 15; col++){
+            start = 0;
+            end = 0;
+            while(true){
+                if(end > 14) break;
+                for(start = end; start <= 14 && tiles[start][col] == null; start++);
+                if(start > 14) break;
+                for(end = start; end <= 14 && tiles[end][col] != null; end++);
+                if(start != end - 1){
+                    for(int i = start; i < end; i++){
+                        t.add(tiles[i][col]);
+                    }
+                    word = new Word(t.toArray(new Tile[t.size()]), start, col, true);
+                    boardWords.add(word);
+                    t.clear();
+                }
+            }
+        }
+
+        return boardWords;
+    }
+
+    public boolean compareTwoWords(Word w1, Word w2){
+        if(w1.getTiles().length != w2.getTiles().length) return false;
+        for(int i = 0; i < w1.getTiles().length; i++){
+            if(w1.getTiles()[i] != w2.getTiles()[i]) return false;
+        }
+        return true;
+    }
+
+
 }
