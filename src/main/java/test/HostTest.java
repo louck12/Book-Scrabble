@@ -15,7 +15,7 @@ public class HostTest {
     }
 
     public static void main(String[] args) {
-        MyServer server = new MyServer(1234, new BookScrabbleHandler());
+       /* MyServer server = new MyServer(1234, new BookScrabbleHandler());
         System.out.println("Server is running...");
         server.start();
         Host hostServer = new Host(8000);
@@ -34,6 +34,6 @@ public class HostTest {
         g1.closeEverything();
         g2.closeEverything();
         g3.closeEverything();
-        hostServer.closeEverything();
+        hostServer.closeEverything();*/
     }
 }
