@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LogInController" style="-fx-alignment: center;">
+
+    <children>
+        <AnchorPane prefHeight="400.0" prefWidth="400.0">
+            <children>
+
+                <Label layoutX="184.0" layoutY="84.0" prefHeight="17.0" prefWidth="89.0" text="Enter UserName" />
+
+                <Label layoutX="55.0" layoutY="235.0" prefHeight="17.0" prefWidth="89.0" text="Choose Mode" />
+                <ChoiceBox fx:id="roleChoiceBox" layoutX="55.0" layoutY="268.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Host" />
+                            <String fx:value="Guest" />
+                        </FXCollections>
+                    </items>
+                </ChoiceBox>
+
+                <Button fx:id="loginButton" layoutX="335.0" layoutY="268.0" mnemonicParsing="false" onAction="#playButtonClicked" text="PLAY" />
+                <TextField fx:id="nameTextField" layoutX="154.0" layoutY="109.0" />
+                <Label layoutX="167.0" layoutY="22.0" prefHeight="38.0" prefWidth="124.0" text="Book Scrabble">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+
+    </children>
+
+</VBox>
