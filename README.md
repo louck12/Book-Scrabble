@@ -44,12 +44,12 @@ Demo link: https://drive.google.com/file/d/1lQOxuefdNktF1vmqkQ9tsqpJJSu66otO/vie
 
 | Task                                        | Duration | Defining Success | Assigned       |
 |---------------------------------------------|----------|------------------|----------------|
-| Define UI components                        |    1 day     |                  |Eitan & Louck   |
-| Design & implement welcome page             |    2 days   |                  |Eitan & Louck   |
-| Design & implement game board & players     |    2 days  |                   |Eitan & Louck  |
-| Integrate UI components with the view model |    1.5 day    |                  |Orel & Yehonatan|
-| Implement error handling                    |    1.5 days   |                  |Orel & Yehonatan|
-| Unit testing                                |    1.5 day    |                  |Orel & Yehonatan|
+| Define UI components                        |    1.5 day     | All components well defined   |Eitan & Louck   |
+| Design & implement welcome page             |    2 days   | We have a welcome page         |Eitan & Louck   |
+| Design & implement game board & players     |    2 days  | Game board and players well designed and implemented                    |Eitan & Louck  |
+| Integrate UI components with the view model |    1.5 day    | Componenets communicate well with the view model |Orel & Yehonatan|
+| Implement error handling                    |    1.5 days   | Errors handled                 |Orel & Yehonatan|
+| Unit testing                                |     1 day  | All tests passed                  |Orel & Yehonatan|
 | Left overs                                  |    0.5 day   |                  |Orel & Yehonatan & Eitan & Louck|
 
 
@@ -62,14 +62,13 @@ Demo link: https://drive.google.com/file/d/1lQOxuefdNktF1vmqkQ9tsqpJJSu66otO/vie
 
 | Task                                                                                | Duration | Defining Success | Assigned    |
 |-------------------------------------------------------------------------------------|----------|------------------|-------------|
-| Define use cases, user interactions and work flow with the view, view model & model |    1 day    |                  |Eitan & Louck|
+| Define use cases, user interactions and work flow with the view, view model & model |    1 day    | MVVM flow working well                 |Eitan & Louck|
 | Implement connection to the model                                                   |    2 days  |                  |Eitan & Louck|
-| Implement user welcome page logic                                                   |     1 day   |                  |Eitan & Louck|
-| Design & implement board manipulation functions                                     |     1.5 day   |                  |Orel & Yehonatan|
-| Design & implement data binding                                                     |     1 day   |                  |Orel & Yehonatan|
-| Implement error handling                                                            |     1 day   |                  |Orel & Yehonatan|
-| 5 min demo video                                                                    |    1 day  |                  |Orel & Yehonatan|
-| Unit testing                                                                        |     1 day  |                  |Eitan & Louck|
+| Implement user welcome page logic                                                   |     1.5 day   | We have an implemented welcome page   |Eitan & Louck|
+| Design & implement board manipulation functions                                     |     2 day   | Board functionality implemented                  |Orel & Yehonatan|
+| Design & implement data binding                                                     |     1 day   | View & View Model successfully binding data     |Orel & Yehonatan|
+| Implement error handling                                                            |     1 day   | Errors handled     |Orel & Yehonatan|
+| Unit testing                                                                        |     1 day  | All tests passed                 |Eitan & Louck|
 | Left overs                                                                          |    0.5 day  |                  |Orel & Yehonatan & Eitan & Louck|
 
 **Third milestone**
@@ -82,5 +81,5 @@ Demo link: https://drive.google.com/file/d/1lQOxuefdNktF1vmqkQ9tsqpJJSu66otO/vie
 
 | Task                                        | Duration | Defining Success | Assigned             |
 |---------------------------------------------|----------|------------------|----------------------|
-| Write code's entire documentation in github |      1.5 day   |                  |    Eitan & Louck|
-| Record presentation video                   |      1.5 day |                  |      Orel & Yehonatan|
+| Write code's entire documentation in github |      1.5 day   | Code's documentation well written  |    Eitan & Louck|
+| Record presentation video         |    1 day  | We have a well explained video       |Orel & Louck & Eitan |
