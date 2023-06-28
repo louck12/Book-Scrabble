@@ -1,0 +1,7 @@
+module:com.example.clientside
+model
+model.board
+model.server
+test
+view
+viewModel
