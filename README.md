@@ -63,7 +63,7 @@ Demo link: https://drive.google.com/file/d/1lQOxuefdNktF1vmqkQ9tsqpJJSu66otO/vie
 | Task                                                                                | Duration | Defining Success | Assigned    |
 |-------------------------------------------------------------------------------------|----------|------------------|-------------|
 | Define use cases, user interactions and work flow with the view, view model & model |    1 day    | MVVM flow working well                 |Eitan & Louck|
-| Implement connection to the model                                                   |    2 days  |                  |Eitan & Louck|
+| Implement connection to the model                                                   |    2 days  | Model successfully connected                 |Eitan & Louck|
 | Implement user welcome page logic                                                   |     1.5 day   | We have an implemented welcome page   |Eitan & Louck|
 | Design & implement board manipulation functions                                     |     2 day   | Board functionality implemented                  |Orel & Yehonatan|
 | Design & implement data binding                                                     |     1 day   | View & View Model successfully binding data     |Orel & Yehonatan|
