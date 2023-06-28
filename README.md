@@ -1,6 +1,6 @@
 # Book-Scrabble: GANTT
 
-Summary video + demo: https://drive.google.com/file/d/1Z5xlpSe-wdFKZ2keZ8aMM0HWXyUhC_zw/view?usp=sharing
+Summary video + demo: https://drive.google.com/file/d/1Z5xlpSe-wdFKZ2keZ8aMM0HWXyUhC_zw/view?usp=sharing\
 Java Doc link: https://drive.google.com/drive/folders/141JHyUWYDtWs1kKerlNZudd2Ertni6dG?usp=sharing
 
 
